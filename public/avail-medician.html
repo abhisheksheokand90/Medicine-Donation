@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Listing Medicine</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="css/allcss.css">
+
+    <script src="js/jquery-1.8.2.min.js"></script>
+
+
+    <script>
+        $(document).ready(function(){
+
+            var activeUser=localStorage.getItem("activeUser");
+            $("#txtEmail").val(activeUser).prop("readonly","true");
+        });
+    </script>
+
+     <script>
+        function doLoadFile(refimg, refprev) {
+            var image = refprev;
+            image.src = URL.createObjectURL(refimg.files[0]);
+
+        }
+
+ 
+       
+
+    </script>
+</head>
+
+<body class="body">
+    <h1 class="heading">Add Medicine Deatils For Donation</h1>
+
+    <div class="container justify-content-center">
+        <form class="row g-3" method="post" enctype="multipart/form-data">
+            <div class="col-md-12">
+                <div class="col-md-11">
+                    <label for="txtEmail" class="form-label">Email</label>
+                    <input type="email" required class="form-control" name="txtEmail" id="txtEmail">
+                </div>
+            </div>
+            <div class="row g-3 ">
+                <div class="col-md-4">
+                    <div class="col-md-10">
+                        <label for="txtMedName" class="form-label">Medicine Name</label>
+                        <input type="text" required class="form-control" name="txtMedName" id="txtMedName">
+                    </div>
+
+                </div>
+                <div class="col-md-4">
+                    <div class="col-md-10">
+                        <label for="txtPacking" class="form-label">Packing</label>
+                        <select id="txtPacking" required name="txtPacking" class="form-select">
+                            <option disabled selected value="">Choose...</option>
+                            <!-- <option selected>...</option> -->
+                            <option value="syrup">Syrup</option>
+                            <option value="tab">Tablet</option>
+                            <option value="cap">Capsule</option>
+                            <option value="powder">Powder</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="col-md-9">
+                        <label for="txtQuantity" class="form-label">Quantity</label>
+                        <input type="text" required class="form-control" name="txtQuantity" id="txtQuantity">
+                    </div>
+                </div>
+            </div>
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <div class="col-md-10">
+                        <label for="txtExpiryDate" class="form-label">Expiry Date</label>
+                        <input type="date" required class="form-control" name="txtExpiryDate" id="txtExpiryDate">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="col-md-10">
+                        <label for="txtCompanyName" class="form-label">Company Name</label>
+                        <input type="text" required class="form-control" name="txtCompanyName" id="txtCompanyName">
+                    </div>
+
+                </div>
+            </div>
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <div class="col-md-10">
+                        <label for="fileMedicine" class="form-label">Upload Medicine</label>
+                        <input type="file" required class="form-control" name="fileMedicine" id="fileMedicine" onchange="doLoadFile(this,prevMedicine)">
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <img src="pics/no image.jpg" height="125px" alt="" srcset="" id="prevMedicine">
+                </div>
+            </div>
+            <div class="row g-3">
+                <div class="col-md-1 d-flex align-items-center">
+                    <label for="txtDescription" class="form-label">Description</label>
+                </div>
+
+                <div class="col-md-10">
+                    <textarea name="txtDescription" class="form-control" rows="6" id="txtDescription"
+                        ></textarea>
+                </div>
+            </div>
+
+            <div class="col-12">
+                <center><button type="submit" formaction="/submit-medicine" class="btn btn-primary mt-3">List The Medicine</button></center>
+            </div>
+        </form>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>

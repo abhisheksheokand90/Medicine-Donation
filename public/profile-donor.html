@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Profile Donor</title>
+    <link rel="stylesheet" href="css/allcss.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+
+    <script src="js/jquery-1.8.2.min.js"></script>
+
+    <script>
+        function doLoadFile(refimg, refprev) {
+            var image = refprev;
+            image.src = URL.createObjectURL(refimg.files[0]);
+
+        }
+
+ 
+    </script>
+
+    <script>
+
+        $(document).ready(function () {
+
+
+            var activeUser=localStorage.getItem("activeUser");
+            $("#txtEmail").val(activeUser).prop("readonly","true");
+
+
+
+            var url = ("/search-profile-donor?txtEmail=" + $("#txtEmail").val());
+
+                $.getJSON(url, function (respJSONary) {
+
+                    // alert(JSON.stringify(respJSONary))
+
+                    if (respJSONary.length == 0)
+                        alert("Invalid Id");
+                    else {
+
+                        $("#txtName").val(respJSONary[0].name);
+                        $("#txtContact").val(respJSONary[0].contact);
+                        $("#txtCity").val(respJSONary[0].city);
+                        $("#txtAddr").val(respJSONary[0].addr);
+                        $("#txtTimings").val(respJSONary[0].timing);
+
+                        if (respJSONary[0].prooftype == "aadhar")
+                            $("#radAadhar").prop("checked", true);
+                        else
+                            if (respJSONary[0].prooftype == "dl")
+                                $("#radDriving").prop("checked", true);
+
+                        $("#prevProof").prop("src", "uploads/" + respJSONary[0].proofpic);
+                        $("#prevProfile").prop("src", "uploads/" + respJSONary[0].donorpic);
+
+
+                        $("#hdnproof").val(respJSONary[0].proofpic);
+                        $("#hdnprofile").val(respJSONary[0].donorpic);
+
+                        var hdn1 = $("#hdnproof").val();
+                        var hdn2 = $("#hdnprofile").val();
+
+                       
+                    }
+
+
+
+                })
+
+        /*    $("#btnSearch").click(function () {
+
+                var url = ("/search-profile-donor?txtEmail=" + $("#txtEmail").val());
+
+                $.getJSON(url, function (respJSONary) {
+
+                    // alert(JSON.stringify(respJSONary))
+
+                    if (respJSONary.length == 0)
+                        alert("Invalid Id");
+                    else {
+
+                        $("#txtName").val(respJSONary[0].name);
+                        $("#txtContact").val(respJSONary[0].contact);
+                        $("#txtCity").val(respJSONary[0].city);
+                        $("#txtAddr").val(respJSONary[0].addr);
+                        $("#txtTimings").val(respJSONary[0].timing);
+
+                        if (respJSONary[0].prooftype == "aadhar")
+                            $("#radAadhar").prop("checked", true);
+                        else
+                            if (respJSONary[0].prooftype == "dl")
+                                $("#radDriving").prop("checked", true);
+
+                        $("#prevProof").prop("src", "uploads/" + respJSONary[0].proofpic);
+                        $("#prevProfile").prop("src", "uploads/" + respJSONary[0].donorpic);
+
+
+                        $("#hdnproof").val(respJSONary[0].proofpic);
+                        $("#hdnprofile").val(respJSONary[0].donorpic);
+
+                        var hdn1 = $("#hdnproof").val();
+                        var hdn2 = $("#hdnprofile").val();
+
+                       
+                    }
+
+
+
+                })
+            })
+
+            */
+
+            // -----------------------------------------------------------------------------------------------------------
+
+
+            $("#btnUpdate").click(function () {
+
+                $("#fileProof").prop("required", false);
+                $("#fileProfile").prop("required", false);
+            })
+
+        })
+    </script>
+
+
+
+</head>
+
+<body class="body">
+
+
+
+
+
+    <h1 class="heading">Profile Donor</h1>
+
+    <div class="container d-flex justify-content-end">
+        <form class="row g-3" style="width: 90%;  padding-left: 10px;" method="post" enctype="multipart/form-data" >
+
+
+            <input type="hidden" name="hdnproof" id="hdnproof">
+            <input type="hidden" name="hdnprofile" id="hdnprofile">
+
+
+
+            <div class="col-md-4">
+                <label for="txtEmail" class="form-label">Email</label>
+                <input type="email" class="form-control" required name="txtEmail" id="txtEmail">
+            </div>
+
+            <!-- <div class="col-md-1"> 
+                <label class="form-label">&nbsp;</label>
+                <input type="button" value="SEARCH" class="btn btn-outline-primary" id="btnSearch">
+            </div>
+            -->
+            <div class="row g-3 col-12">
+                <div class="col-md-3 me-5">
+                    <label for="txtName" class="form-label">Name</label>
+                    <input type="text" class="form-control" required name="txtName" id="txtName">
+                </div>
+
+                <div class="col-md-3 me-5">
+                    <label for="txtContact" class="form-label">Contact Number</label>
+                    <input type="text" class="form-control" required name="txtContact" id="txtContact">
+                </div>
+
+                <div class="col-md-3">
+                    <label for="txtCity" class="form-label">City</label>
+                    <input type="text" class="form-control" required name=txtCity id="txtCity" list="citiesname">
+                    <datalist id="citiesname">
+                        <option value="Agra">
+                        <option value="Ahmedabad">
+                        <option value="Amritsar">
+                        <option value="Asansol">
+                        <option value="Aurangabad">
+                        <option value="Bangalore">
+                        <option value="Bareilly">
+                        <option value="Bhopal">
+                        <option value="Bhubaneswar">
+                        <option value="Chandigarh">
+                        <option value="Chennai">
+                        <option value="Coimbatore">
+                        <option value="Cuttack">
+                        <option value="Dehradun">
+                        <option value="Delhi">
+                        <option value="Dhanbad">
+                        <option value="Durgapur">
+                        <option value="Faridabad">
+                        <option value="Ghaziabad">
+                        <option value="Goa">
+                        <option value="Gorakhpur">
+                        <option value="Guntur">
+                        <option value="Guwahati">
+                        <option value="Gwalior">
+                        <option value="Hyderabad">
+                        <option value="Indore">
+                        <option value="Jabalpur">
+                        <option value="Jaipur">
+                        <option value="Jalandhar">
+                        <option value="Jammu">
+                        <option value="Jamshedpur">
+                        <option value="Jhansi">
+                        <option value="Jodhpur">
+                        <option value="Kanpur">
+                        <option value="Kochi">
+                        <option value="Kolkata">
+                        <option value="Kota">
+                        <option value="Lucknow">
+                        <option value="Ludhiana">
+                        <option value="Madurai">
+                        <option value="Meerut">
+                        <option value="Mumbai">
+                        <option value="Mysore">
+                        <option value="Nagpur">
+                        <option value="Nashik">
+                        <option value="Noida">
+                        <option value="Patna">
+                        <option value="Puducherry">
+                        <option value="Pune">
+                        <option value="Raipur">
+                        <option value="Rajkot">
+                        <option value="Ranchi">
+                        <option value="Srinagar">
+                        <option value="Surat">
+                        <option value="Thane">
+                        <option value="Thrissur">
+                        <option value="Tiruchirappalli">
+                        <option value="Udaipur">
+                        <option value="Vadodara">
+                        <option value="Varanasi">
+                        <option value="Vijayawada">
+                        <option value="Visakhapatnam">
+                    </datalist>
+                </div>
+            </div>
+
+            <div class="col-md-10">
+                <label for="txtAddr" class="form-label">Address</label>
+                <input type="text" class="form-control" required name="txtAddr" id="txtAddr">
+            </div>
+
+
+
+            <div class="row mt-4">
+
+
+                <div class="col-md-3 me-5">
+                    <label for="txtTimings" class="form-label">Contact Timing</label>
+                    <input type="text" class="form-control" required name="txtTimings" id="txtTimings">
+                </div>
+
+
+                <div class="col-md-2 form-label mt-4">
+                    <label for="">Identity Proof</label>
+                </div>
+
+
+                <div class="form-check col-md-2 mt-4">
+                    <input class="form-check-input" type="radio" name="identity" required value="aadhar" id="radAadhar">
+                    <label class="form-check-label" for="radAadhar">
+                        Aadhar Card
+                    </label>
+                </div>
+
+
+                <div class="form-check col-md-2 mt-4">
+                    <input class="form-check-input" type="radio" name="identity" required value="dl" id="radDriving">
+                    <label class="form-check-label" for="radDriving">
+                        Driving Licence
+                    </label>
+                </div>
+
+            </div>
+
+            <div class="row mt-4">
+                <div class="mb-3 col-md-5 me-5">
+                    <label for="formFile" class="form-label">Select Proof Type</label>
+                    <input class="form-control" required type="file" name="fileProof" id="fileProof"
+                        onchange="doLoadFile(this,prevProof)">
+                </div>
+
+                <div class="mb-3 col-md-5">
+                    <label for="formFile" class="form-label">Select Profile Pic</label>
+                    <input class="form-control" required type="file" name="fileProfile" id="fileProfile"
+                        onchange="doLoadFile(this,prevProfile)">
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-md-4 mt-4">
+                    <center> <img src="pics/no image.jpg" width="150px" id="prevProof" name="prevProof" height="150px"
+                            alt=""></center>
+                </div>
+
+                <div class="col-md-8 mt-4">
+                    <center> <img src="pics/no image.jpg" width="150px" id="prevProfile" name="prevProfile"
+                            height="150px" alt=""></center>
+                </div>
+
+            </div>
+            <div class="col-12" style="margin-left: -100px;">
+                <center><button type="submit" class="btn btn-primary me-4"
+                        formaction="/submit-profile-donor">Save</button>
+                    <button type="submit" class="btn btn-warning" id="btnUpdate"
+                        formaction="/update-profile-donor">Update</button>
+                </center>
+
+            </div>
+        </form>
+    </div>
+
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>

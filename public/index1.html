@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+
+  <title>Home Page</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+  <link rel="stylesheet" href="css/allcss.css">
+  <script src="js/jquery-1.8.2.min.js"></script>
+
+  <style>
+    label {
+      margin-top: 10px;
+      margin-left: 5px;
+    }
+  </style>
+
+  <!-- Email OTP Verification in Signup Modal -->
+  <script>
+
+
+    $(document).ready(function () {
+      $("#sendOtpBtn").click(function () {
+        const email = $("#txtSignupEmail").val();
+        if (!email) return alert("Please enter your email first.");
+
+        $.get("/send-otp?email=" + email, function (response) {
+          $("#otpMsg").text(response);
+        });
+      });
+
+      $("#verifyOtpBtn").click(function () {
+        const email = $("#txtSignupEmail").val();
+        const otp = $("#otpCode").val();
+        if (!otp) return alert("Please enter the OTP.");
+
+        $.get("/verify-otp?email=" + email + "&otp=" + otp, function (response) {
+          $("#otpMsg").text(response);
+          if (response.includes("OTP Verified")) isOtpVerified = true;
+        });
+      });
+
+      $("#btnSavaSignup").click(function () {
+        if (!isOtpVerified) {
+          alert("Please verify your email before signing up.");
+          return;
+        }
+
+        const email = $("#txtSignupEmail").val();
+        const pwd = $("#txtSignupPwd").val();
+        const utype = $("#userType").val();
+
+        const url = "/savesignup?txtSignupEmail=" + email + "&txtSignupPwd=" + pwd + "&userType=" + utype;
+        $.get(url, function (result) {
+          alert(result);
+        });
+      });
+
+
+
+
+
+
+
+      $("#btnSavaSignup").click(function () {
+
+        var url = "/savesignup?txtSignupEmail=" + $("#txtSignupEmail").val() + "&txtSignupPwd=" + $("#txtSignupPwd").val() + "&userType=" + $("#userType").val();
+        $.get(url, function (resutl) {
+          alert(result);
+        })
+      })
+
+      // --------------------------------------------------------------------------------------------------------------
+      /*
+            $("#btnSaveLogin").click(function(){
+      
+              var url="/checklogindetails?txtLoginEmail="+$("#txtLoginEmail").val()+"&txtLoginPwd="+$("#txtLoginPwd").val();
+              $.get(url,function(result){
+                alert(result);
+              })
+            })
+      
+      
+      */
+
+      $("#btnSaveLogin").click(function () {
+
+        var url = "/checklogindetails?txtLoginEmail=" + $("#txtLoginEmail").val();
+        $.getJSON(url, function (respJSONary) {
+
+          // alert(JSON.stringify(respJSONary));
+          if (respJSONary.length == 0)
+            alert("Invalid Id");
+          else {
+            if (respJSONary[0].status == 0)
+              alert("User Blocked");
+            else
+              if (respJSONary[0].pwd != $("#txtLoginPwd").val())
+                alert("Wrong Password");
+              else {
+
+                localStorage.setItem("activeUser",$("#txtLoginEmail").val());
+
+                // alert(respJSONary[0].utype);
+                if (respJSONary[0].utype == "donor") {
+                  window.location.replace("/dash-donor.html");
+                }
+
+
+                if (respJSONary[0].utype == "needy") {
+                  window.location.replace("/dash-needy.html");
+                }
+
+              }
+          }
+        })
+      })
+    })
+
+
+
+
+
+  </script>
+
+
+</head>
+
+<body>
+
+
+  <h1 class="heading">Medicine Donation Website</h1>
+  <div id="btnDiv" class="mt-4">
+
+    <button type="button" id="btnSignup" class="btn btn-primary" data-bs-toggle="modal"
+      data-bs-target="#signupModal">Sign Up</button>
+    <button type="button" id="btnLogin" class="btn btn-primary" data-bs-target="#loginModal"
+      data-bs-toggle="modal">Login</button>
+  </div>
+
+
+
+
+
+
+
+
+  <!--  -->
+
+
+  <!-- Modal -->
+  <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">LOGIN</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form class="row g-3">
+            <div class="col-md-11">
+              <label for="txtLoginEmail" class="form-label">Email</label>
+              <input type="email" class="form-control" id="txtLoginEmail">
+            </div>
+
+
+
+
+
+
+            <div class="col-md-11">
+              <label for="txtLoginPwd" class="form-label">Password</label>
+              <input type="password" class="form-control" id="txtLoginPwd">
+            </div>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">BACK</button>
+          <button type="button" class="btn btn-primary" id="btnSaveLogin">LOGIN</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+  <!-- Modal -->
+  <div class="modal fade" id="signupModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">SIGN UP</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form class="row g-3">
+            <div class="col-md-11">
+              <label for="txtSignupEmail" class="form-label">Email</label>
+              <div class="input-group mb-2">
+                <input type="email" class="form-control" id="txtSignupEmail">
+                <button class="btn btn-outline-secondary" type="button" id="sendOtpBtn">Send OTP</button>
+              </div>
+            </div>
+
+
+
+
+
+
+            <div class="col-md-11">
+              <label for="otpCode" class="form-label">Verify OTP</label>
+              <div class="input-group mb-2">
+                <input type="text" class="form-control" id="otpCode" placeholder="Enter OTP here">
+
+                <button class="btn btn-outline-success" type="button" id="verifyOtpBtn">Verify OTP</button>
+              </div>
+              <div id="otpMsg" class="form-text text-danger"></div>
+            </div>
+
+
+
+
+
+            <div class="col-md-11">
+              <label for="txtSignupPwd" class="form-label">Create Password</label>
+              <input type="password" class="form-control" id="txtSignupPwd">
+            </div>
+
+            <div class="col-md-11">
+              <label for="userType" class="form-label">User</label>
+              <select id="userType" class="form-select">
+                <option selected>Choose...</option>
+                <option value="donor">Donor</option>
+                <option value="needy">Needy</option>
+              </select>
+            </div>
+
+
+
+        </div>
+
+
+
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">BACK</button>
+          <button type="button" class="btn btn-primary" id="btnSavaSignup">SIGNUP</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
+    crossorigin="anonymous"></script>
+</body>
+
+</html>
